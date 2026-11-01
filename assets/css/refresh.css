@@ -26,6 +26,7 @@
   --r-ease: cubic-bezier(.2, .75, .25, 1);
   --r-ease-out: cubic-bezier(.16, 1, .3, 1);
   --r-header-h: 4.75rem;
+  --c-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 /* ---------- Type: Inter for text, Inter Display for headings ---------- */
@@ -859,11 +860,16 @@ html[lang] body #main-content .sx-step__overview {
 
 /* Detail card (inline on small screens, inside the sticky panel on large) */
 .sx-detail {
+  position: relative;
   margin-top: 1.75rem;
   overflow: hidden;
-  border: 1px solid var(--c-line);
+  border: 1px solid rgba(255, 255, 255, .12);
   border-radius: var(--r-radius-lg);
-  background: var(--c-deep);
+  background:
+    radial-gradient(70% 55% at 0% 0%, rgba(0, 195, 237, .14), transparent 70%),
+    linear-gradient(rgba(255, 255, 255, .035) 1px, transparent 1px) 0 0 / 32px 32px,
+    linear-gradient(90deg, rgba(255, 255, 255, .035) 1px, transparent 1px) 0 0 / 32px 32px,
+    var(--c-deep);
   box-shadow: 0 2rem 4rem rgba(0, 22, 28, .35);
 }
 
@@ -871,106 +877,207 @@ html[lang] body #main-content .sx-step__overview {
   outline: none;
 }
 
+.sx-detail__aside {
+  padding: 1rem 1rem 0;
+}
+
+/* Photo: teal-toned so every sector image shares one look; colour returns on hover */
 .sx-detail__media {
   position: relative;
-  height: clamp(15rem, 62vw, 24rem);
   margin: 0;
   overflow: hidden;
-  background: #00242d;
+  border-radius: 16px;
+  background: #00313d;
+  isolation: isolate;
 }
 
-/* The whole photo is always visible; a blurred copy fills the frame around it */
 .sx-detail__media img {
-  position: relative;
-  z-index: 1;
+  display: block;
   width: 100%;
-  height: 100%;
-  object-fit: contain;
+  height: auto;
 }
 
-.sx-detail__media .sx-detail__backdrop {
+.sx-detail__media::before {
+  content: '';
   position: absolute;
-  z-index: 0;
-  top: -12%;
-  left: -12%;
-  width: 124%;
-  height: 124%;
-  object-fit: cover;
-  filter: blur(28px) saturate(1.15) brightness(.55);
+  z-index: 1;
+  inset: 0;
+  background: linear-gradient(155deg, #00c3ed 0%, #00647b 55%, #00313d 100%);
+  mix-blend-mode: color;
+  opacity: .85;
+  transition: opacity .6s var(--r-ease);
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sx-detail__media:hover::before {
+    opacity: 0;
+  }
+}
+
+/* Viewfinder corners */
+.sx-detail__media::after {
+  content: '';
+  position: absolute;
+  z-index: 3;
+  inset: 12px;
+  background:
+    linear-gradient(var(--c-accent), var(--c-accent)) left top / 18px 2px no-repeat,
+    linear-gradient(var(--c-accent), var(--c-accent)) left top / 2px 18px no-repeat,
+    linear-gradient(var(--c-accent), var(--c-accent)) right top / 18px 2px no-repeat,
+    linear-gradient(var(--c-accent), var(--c-accent)) right top / 2px 18px no-repeat,
+    linear-gradient(var(--c-accent), var(--c-accent)) left bottom / 18px 2px no-repeat,
+    linear-gradient(var(--c-accent), var(--c-accent)) left bottom / 2px 18px no-repeat,
+    linear-gradient(var(--c-accent), var(--c-accent)) right bottom / 18px 2px no-repeat,
+    linear-gradient(var(--c-accent), var(--c-accent)) right bottom / 2px 18px no-repeat;
+  opacity: .9;
+  pointer-events: none;
+}
+
+/* Scan line that sweeps the photo when a sector becomes active */
+.sx-detail__scan {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 28%;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 195, 237, .18) 80%, rgba(127, 227, 247, .85) 100%);
+  opacity: 0;
+  transform: translateY(-100%);
+  pointer-events: none;
+}
+
+.sx-detail.is-active .sx-detail__scan {
+  animation: sx-scan 1.9s var(--r-ease-out) .25s 1 both;
+}
+
+@keyframes sx-scan {
+  0% { opacity: 1; transform: translateY(-100%); }
+  85% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(360%); }
+}
+
+/* Large index + progress ticks (shown in the desktop panel) */
+.sx-detail__index {
+  display: none;
+}
+
+.sx-detail__count {
+  display: flex;
+  align-items: baseline;
+  gap: .6rem;
+}
+
+.sx-detail__num {
+  color: #fff;
+  font: 200 clamp(3.25rem, 4.6vw, 4.75rem)/.9 'Inter', sans-serif;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.045em;
+}
+
+.sx-detail__total {
+  color: rgba(255, 255, 255, .5);
+  font: 500 .8rem/1 var(--c-mono);
+  letter-spacing: .14em;
+}
+
+.sx-ticks {
+  display: flex;
+  gap: 4px;
+}
+
+.sx-ticks i {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, .14);
+}
+
+.sx-ticks i.is-on {
+  background: var(--c-accent);
+  box-shadow: 0 0 6px rgba(0, 195, 237, .55);
 }
 
 .sx-detail__body {
   position: relative;
-  padding: 1.25rem clamp(1.5rem, 2.5vw, 2.25rem) clamp(1.5rem, 2.5vw, 2rem);
-}
-
-.sx-detail__meta {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  color: var(--c-copy);
-  font-size: .8rem;
-  font-weight: 600;
-  letter-spacing: .12em;
-}
-
-.sx-detail__bar {
-  flex: 1;
-  height: 2px;
-  overflow: hidden;
-  border-radius: 2px;
-  background: rgba(255, 255, 255, .15);
-}
-
-.sx-detail__bar span {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: var(--c-accent);
-  transform: scaleX(var(--sx-share, 0));
-  transform-origin: left;
-  transition: transform .6s var(--r-ease-out);
+  padding: 1.25rem clamp(1.25rem, 2.5vw, 2.25rem) clamp(1.5rem, 2.5vw, 2rem);
 }
 
 html[lang] body #main-content .sx-detail__title {
-  margin: 1rem 0 1.25rem;
+  margin: 0 0 1.1rem;
   font-size: clamp(1.6rem, 2.2vw, 2.2rem);
   line-height: 1.1;
   letter-spacing: -.022em;
 }
 
-.sx-detail .eyebrow {
-  margin: 0 0 .75rem;
+html[lang] .sx-detail .eyebrow.sx-detail__label {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  margin: 0 0 .6rem;
   color: var(--c-accent);
+  font: 500 .78rem/1.3 var(--c-mono);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.sx-detail__label::before {
+  content: '';
+  flex: 0 0 auto;
+  width: .45rem;
+  height: .45rem;
+  border-radius: 50%;
+  background: var(--c-accent);
+  box-shadow: 0 0 0 4px rgba(0, 195, 237, .18);
+  animation: sx-pulse 2.4s ease-in-out infinite;
+}
+
+.sx-detail__label span {
+  padding: .15rem .45rem;
+  border: 1px solid rgba(0, 195, 237, .4);
+  border-radius: 999px;
+  color: #fff;
+}
+
+@keyframes sx-pulse {
+  50% { box-shadow: 0 0 0 7px rgba(0, 195, 237, 0); }
 }
 
 .sx-services {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 1.5rem;
+  gap: 0 1.75rem;
   margin: 0 0 1.5rem;
   padding: 0;
   list-style: none;
+  counter-reset: svc;
 }
 
 html[lang] body #main-content .sx-services li {
   position: relative;
-  padding: .5rem 0 .5rem 1.4rem;
-  border-bottom: 1px solid var(--c-line);
+  padding: .55rem 0 .55rem 2.1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
   color: var(--c-copy);
   font-size: .9rem;
   line-height: 1.4;
+  counter-increment: svc;
+  transition: color .2s var(--r-ease);
 }
 
 .sx-services li::before {
-  content: '';
+  content: counter(svc, decimal-leading-zero);
   position: absolute;
-  top: .95rem;
+  top: .62rem;
   left: 0;
-  width: .45rem;
-  height: .45rem;
-  border-radius: 50%;
-  background: var(--c-accent);
+  color: var(--c-accent);
+  font: 500 .75rem/1.4 var(--c-mono);
+  letter-spacing: .04em;
+  opacity: .85;
+}
+
+html[lang] body #main-content .sx-services li:hover {
+  color: #fff;
 }
 
 /* Large screens: split view, details move into the sticky panel */
@@ -1002,8 +1109,8 @@ html[lang] body #main-content .sx-services li {
   .sx.is-split .sx-detail {
     position: absolute;
     inset: 0;
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: clamp(14rem, 40%, 24rem) minmax(0, 1fr);
     margin: 0;
     overflow: hidden;
     opacity: 0;
@@ -1019,41 +1126,59 @@ html[lang] body #main-content .sx-services li {
     transition: opacity .55s var(--r-ease-out), transform .7s var(--r-ease-out), visibility 0s;
   }
 
-  /* Photo column on the left at full card height, details on the right */
+  .sx.is-split .sx-detail__aside {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.5rem;
+    min-height: 0;
+    padding: clamp(1.25rem, 2vw, 1.75rem);
+    border-right: 1px solid rgba(255, 255, 255, .08);
+  }
+
   .sx.is-split .sx-detail__media {
-    flex: 0 0 48%;
-    height: auto;
+    flex: 0 1 auto;
+    min-height: 0;
+    aspect-ratio: 4 / 5;
+  }
+
+  .sx.is-split .sx-detail__media img {
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.06);
+    transition: transform 1.6s var(--r-ease-out);
+  }
+
+  .sx.is-split .sx-detail.is-active .sx-detail__media img {
+    transform: scale(1);
+  }
+
+  .sx.is-split .sx-detail__index {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .sx.is-split .sx-ticks i.is-on {
+    opacity: 0;
+    transition: opacity .3s ease calc(var(--i) * 45ms + .3s);
+  }
+
+  .sx.is-split .sx-detail.is-active .sx-ticks i.is-on {
+    opacity: 1;
   }
 
   .sx.is-split .sx-detail__body {
     display: flex;
-    flex: 1 1 auto;
     flex-direction: column;
     justify-content: center;
     min-width: 0;
     overflow: auto;
-    padding: clamp(1.5rem, 2.4vw, 2.25rem);
+    padding: clamp(1.5rem, 2.6vw, 2.5rem);
   }
 
   .sx.is-split .sx-services {
     grid-template-columns: 1fr;
-  }
-
-  html[lang] body #main-content .sx.is-split .sx-services li {
-    padding-block: .42rem;
-  }
-
-  .sx.is-split .sx-services li::before {
-    top: .85rem;
-  }
-
-  .sx.is-split .sx-detail__media img:not(.sx-detail__backdrop) {
-    transform: scale(1.05);
-    transition: transform 1.6s var(--r-ease-out);
-  }
-
-  .sx.is-split .sx-detail.is-active .sx-detail__media img:not(.sx-detail__backdrop) {
-    transform: scale(1);
   }
 
   .sx.is-split .sx-step {
@@ -1368,8 +1493,14 @@ html[lang] .check input[type='checkbox'] {
   html[lang] .v4-text-link > span,
   .sx-step,
   .sx-detail,
-  .sx-detail__media img {
+  .sx-detail__media img,
+  .sx-ticks i {
     transition: none !important;
+  }
+
+  .sx-detail__scan,
+  .sx-detail__label::before {
+    animation: none !important;
   }
 
   html[lang] .v4-pathway:hover {
@@ -1378,13 +1509,8 @@ html[lang] .check input[type='checkbox'] {
 }
 
 /* Inline (small-screen) details already sit under the sector title */
-.sx:not(.is-split) .sx-detail__title,
-.sx:not(.is-split) .sx-detail__meta {
+.sx:not(.is-split) .sx-detail__title {
   display: none;
-}
-
-.sx:not(.is-split) .sx-detail__body {
-  padding-top: 1.25rem;
 }
 
 .sx-services.is-collapsed li:nth-child(n+6) {
@@ -1393,52 +1519,6 @@ html[lang] .check input[type='checkbox'] {
 
 .sx-more[hidden] {
   display: none;
-}
-
-/* Phones and tablets: the photo keeps its own shape, up to a sensible height */
-.sx:not(.is-split) .sx-detail__media {
-  height: auto;
-}
-
-.sx:not(.is-split) .sx-detail__media img:not(.sx-detail__backdrop) {
-  display: block;
-  height: auto;
-  max-height: 26rem;
-}
-
-/* Shorter laptop screens: tighten the details so long lists fit the panel */
-@media (min-width: 66.001rem) and (max-height: 900px) {
-  .sx.is-split .sx-detail__body {
-    padding-block: 1.5rem;
-  }
-
-  html[lang] body #main-content .sx.is-split .sx-detail__title {
-    margin: .75rem 0 .9rem;
-    font-size: clamp(1.45rem, 1.9vw, 1.85rem);
-  }
-
-  .sx.is-split .sx-detail .eyebrow {
-    margin-bottom: .5rem;
-  }
-
-  html[lang] body #main-content .sx.is-split .sx-services li {
-    padding-block: .3rem;
-    font-size: .85rem;
-    line-height: 1.35;
-  }
-
-  .sx.is-split .sx-services li::before {
-    top: .7rem;
-  }
-
-  .sx.is-split .sx-services {
-    margin-bottom: 1.1rem;
-  }
-
-  .sx.is-split .sx-detail .button {
-    min-height: 2.75rem;
-    padding-block: .6rem;
-  }
 }
 
 .sx-more {
@@ -1453,8 +1533,39 @@ html[lang] .check input[type='checkbox'] {
   cursor: pointer;
 }
 
+/* Shorter laptop screens: tighten the details so long lists fit the panel */
+@media (min-width: 66.001rem) and (max-height: 900px) {
+  .sx.is-split .sx-detail__body {
+    padding-block: 1.5rem;
+  }
+
+  html[lang] body #main-content .sx.is-split .sx-detail__title {
+    margin-bottom: .85rem;
+    font-size: clamp(1.45rem, 1.9vw, 1.85rem);
+  }
+
+  html[lang] body #main-content .sx.is-split .sx-services li {
+    padding-block: .3rem;
+    font-size: .85rem;
+    line-height: 1.35;
+  }
+
+  .sx.is-split .sx-services li::before {
+    top: .38rem;
+  }
+
+  .sx.is-split .sx-services {
+    margin-bottom: 1.1rem;
+  }
+
+  .sx.is-split .sx-detail .button {
+    min-height: 2.75rem;
+    padding-block: .6rem;
+  }
+}
+
 @media (min-width: 66.001rem) and (max-height: 760px) {
-  .sx.is-split .sx-detail .eyebrow {
+  html[lang] .sx.is-split .sx-detail .eyebrow.sx-detail__label {
     display: none;
   }
 
@@ -1463,7 +1574,11 @@ html[lang] .check input[type='checkbox'] {
   }
 
   .sx.is-split .sx-services li::before {
-    top: .6rem;
+    top: .28rem;
+  }
+
+  .sx-detail__num {
+    font-size: 3rem;
   }
 }
 
