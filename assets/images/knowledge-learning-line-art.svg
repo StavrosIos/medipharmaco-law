@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 400" fill="none" aria-hidden="true">
+  <g stroke="#00647b" stroke-width="1.2" opacity=".58">
+    <circle cx="240" cy="192" r="157"/>
+    <ellipse cx="240" cy="192" rx="207" ry="79" transform="rotate(-31 240 192)"/>
+    <ellipse cx="240" cy="192" rx="207" ry="79" transform="rotate(31 240 192)"/>
+    <path d="M70 192h34M376 192h34M240 16v30M240 338v30"/>
+  </g>
+  <g stroke="#00c3ed" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke-width="1.8" d="M240 270v27m-74 0h148m-124 14h100m-82 14h64"/>
+    <path stroke-width="2" d="M240 266c-30-24-68-33-111-31v-91c45-2 83 8 111 34 28-26 66-36 111-34v91c-43-2-81 7-111 31Z"/>
+    <path stroke-width="1.5" d="M240 178v88m-91-99c27 1 52 8 74 22m-74-3c27 2 52 9 74 23m-74-4c27 2 52 9 74 23m148-61c-27 1-52 8-74 22m74-3c-27 2-52 9-74 23m74-4c-27 2-52 9-74 23"/>
+    <circle cx="240" cy="128" r="10" stroke-width="1.8"/>
+  </g>
+  <g fill="#00c3ed">
+    <circle cx="72" cy="192" r="3.5"/>
+    <circle cx="408" cy="192" r="3.5"/>
+    <circle cx="112" cy="64" r="2.5" opacity=".7"/>
+    <circle cx="368" cy="320" r="2.5" opacity=".7"/>
+  </g>
+</svg>

@@ -1,0 +1,232 @@
+@font-face {
+  font-family: 'Manrope';
+  src: url('../fonts/ManropeVariable.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Kalam';
+  src: url('../fonts/Kalam-Latin-Regular.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+.v4-detail-content .v4-list li {
+  font-size: 1.2rem;
+}
+
+:root {
+  --sans: 'Inter', 'Avenir Next', Avenir, Arial, sans-serif;
+  --serif: 'Inter', 'Avenir Next', Avenir, Arial, sans-serif;
+}
+
+body {
+  font-family: var(--sans);
+  font-weight: 400;
+}
+
+#main-content p:not(.eyebrow):not(.eyebrow--light),
+#main-content li,
+#main-content blockquote,
+.v4-metric > span {
+  font-family: 'Manrope', 'Inter', sans-serif;
+}
+
+#main-content .v4-founder-letter .v4-founder-copy p {
+  font-family: 'Kalam', cursive;
+  font-size: 1.51rem;
+  font-weight: 400;
+  line-height: 1.63;
+  letter-spacing: -0.044em;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('../fonts/InterVariable.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter Display';
+  src: url('../fonts/InterDisplay-Medium.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter Display';
+  src: url('../fonts/InterDisplay-SemiBold.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter Display';
+  src: url('../fonts/InterDisplay-Bold.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+body.home-page--gsap-text {
+  --sans: 'Inter', 'Avenir Next', Avenir, Arial, sans-serif;
+  --serif: 'Inter', 'Avenir Next', Avenir, Arial, sans-serif;
+}
+
+body.home-page--gsap-text p:not(.eyebrow):not(.eyebrow--light) {
+  font-weight: 400;
+}
+
+body.home-page--gsap-text #main-content p:not(.eyebrow):not(.eyebrow--light),
+body.home-page--gsap-text #main-content li,
+body.home-page--gsap-text #main-content .v4-metric > span {
+  font-size: 1.1rem;
+}
+
+body.home-page--gsap-text #main-content .v4-founder-letter .v4-founder-copy p {
+  font-size: 1.51rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Inter Display', sans-serif;
+}
+
+#main-content h1,
+#main-content h2,
+body :is(.search-dialog, .consent-banner, .consent-modal) h1,
+body :is(.search-dialog, .consent-banner, .consent-modal) h2 {
+  font-weight: 700;
+}
+
+#main-content h3,
+body :is(.search-dialog, .consent-banner, .consent-modal) h3 {
+  font-weight: 600;
+}
+
+#main-content h4,
+#main-content h5,
+#main-content h6,
+body :is(.search-dialog, .consent-banner, .consent-modal) h4,
+body :is(.search-dialog, .consent-banner, .consent-modal) h5,
+body :is(.search-dialog, .consent-banner, .consent-modal) h6 {
+  font-weight: 500;
+}
+
+#main-content h1,
+#main-content h2,
+#main-content h3,
+#main-content h4,
+#main-content h5,
+#main-content h6,
+body :is(.search-dialog, .consent-banner, .consent-modal) h1,
+body :is(.search-dialog, .consent-banner, .consent-modal) h2,
+body :is(.search-dialog, .consent-banner, .consent-modal) h3,
+body :is(.search-dialog, .consent-banner, .consent-modal) h4,
+body :is(.search-dialog, .consent-banner, .consent-modal) h5,
+body :is(.search-dialog, .consent-banner, .consent-modal) h6 {
+  font-family: 'Inter Display', sans-serif;
+}
+
+body.home-page--gsap-text .v4-narrative h2,
+body.home-page--gsap-text .v4-section-heading h2,
+body.home-page--gsap-text .v4-cta-grid h2,
+body.home-page--gsap-text .v4-traction-intro h2 {
+  font-size: clamp(2.4rem, 3.68vw, 3.68rem);
+}
+
+body.home-page--gsap-text .v4-pathway h2 {
+  font-size: clamp(1.04rem, 1.36vw, 1.36rem);
+}
+
+body.home-page--gsap-text .v4-hero-tagline {
+  max-width: none;
+}
+
+body.home-page--gsap-text .v4-traction .v4-metric strong {
+  font-weight: 700;
+}
+
+body.home-page--gsap-text .v4-quote-mark {
+  font-size: 10rem;
+}
+
+@media (min-width: 66.001rem) {
+  body.home-page--gsap-text .v4-hero-rotation {
+    font-size: inherit;
+  }
+}
+
+@media (max-width: 48rem) {
+  body.home-page--gsap-text .v4-pathway h2 {
+    font-size: 1.12rem;
+  }
+
+  body.home-page--gsap-text .v4-hero h1,
+  body.home-page--gsap-text .v4-hero-rotation {
+    font-size: 2.16rem;
+  }
+
+  body.home-page--gsap-text .v4-hero h1 {
+    text-wrap: balance;
+  }
+
+  body.home-page--gsap-text .v4-hero-rotation-row {
+    hyphens: auto;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Apply the homepage heading scale to content pages as well. */
+body:not(.home-page--gsap-text) #main-content h1 {
+  font-size: clamp(3.5rem, 5.2vw, 5.2rem);
+}
+
+body:not(.home-page--gsap-text) #main-content h2 {
+  font-size: clamp(2.4rem, 3.68vw, 3.68rem);
+}
+
+body:not(.home-page--gsap-text) #main-content .v4-pathway h2 {
+  font-size: clamp(1.04rem, 1.36vw, 1.36rem);
+}
+
+body:not(.home-page--gsap-text) #main-content h3 {
+  font-size: clamp(1.35rem, 1.65vw, 1.8rem);
+}
+
+@media (max-width: 48rem) {
+  body.home-page--gsap-text #main-content h1,
+  body:not(.home-page--gsap-text) #main-content h1 {
+    font-size: 2.4rem;
+  }
+
+  body.home-page--gsap-text #main-content h2,
+  body:not(.home-page--gsap-text) #main-content h2 {
+    font-size: clamp(1.875rem, 8vw, 2.125rem);
+  }
+
+  body.home-page--gsap-text #main-content .v4-pathway h2,
+  body:not(.home-page--gsap-text) #main-content .v4-pathway h2 {
+    font-size: 1.12rem;
+  }
+
+  body:not(.home-page--gsap-text) #main-content .v4-pathway h2 {
+    font-size: 1.12rem;
+  }
+
+  body.home-page--gsap-text #main-content h3,
+  body:not(.home-page--gsap-text) #main-content h3 {
+    font-size: 1.5rem;
+  }
+}

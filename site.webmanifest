@@ -1,0 +1,15 @@
+{
+  "name": "MediPharmaco Law",
+  "short_name": "MediPharmaco",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#15282e",
+  "theme_color": "#00313d",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
