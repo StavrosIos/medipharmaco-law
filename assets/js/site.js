@@ -977,10 +977,30 @@
     }
     track.addEventListener('pointerup', finishPointer);
     track.addEventListener('pointercancel', finishPointer);
-    track.addEventListener('lostpointercapture', finishPointer);
+    // Touch pointers start captured by the card under the finger; taking the capture
+    // for the track makes that card report a lost capture, which must not end the swipe.
+    track.addEventListener('lostpointercapture', function (event) {
+      if (event.target === track) finishPointer(event);
+    });
     track.addEventListener('click', function (event) {
       if (suppressClick) { event.preventDefault(); event.stopPropagation(); }
     }, true);
+
+    // Two-finger trackpad swipes: one sector per gesture, ignoring the momentum tail.
+    var wheelDistance = 0;
+    var wheelLocked = false;
+    var wheelIdleTimer = 0;
+    track.addEventListener('wheel', function (event) {
+      if (Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return;
+      event.preventDefault();
+      window.clearTimeout(wheelIdleTimer);
+      wheelIdleTimer = window.setTimeout(function () { wheelDistance = 0; wheelLocked = false; }, 220);
+      if (wheelLocked) return;
+      wheelDistance += event.deltaX;
+      if (Math.abs(wheelDistance) < 30) return;
+      wheelLocked = true;
+      moveCarousel(wheelDistance > 0 ? 1 : -1, true);
+    }, {passive:false});
     window.addEventListener('resize', function () { renderCards(reducedMotion.matches ? 0 : 0.2, 0); });
     scheduleAutoplay();
   });
