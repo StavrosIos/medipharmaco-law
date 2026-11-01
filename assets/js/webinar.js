@@ -249,7 +249,7 @@
     label.className = "wb-session__status";
     label.textContent = "Ended";
     session.element.appendChild(label);
-    var choice = form && form.querySelector("input[name='session'][value='" + session.element.getAttribute("data-start") + "']");
+    var choice = form && form.querySelector("input[name='session'][data-start='" + session.element.getAttribute("data-start") + "']");
     if (choice) choice.disabled = true;
   });
   if (sessions.length && sessions.every(function (session) { return session.ended; })) {
@@ -450,13 +450,40 @@
     });
   }
 
-  /* Registration form: preview only until a registration method is chosen */
+  /* Registration form: sent to Netlify Forms without leaving the page.
+     Without JavaScript the form still posts normally and Netlify shows its own confirmation. */
   if (form) {
     var formStatus = form.querySelector("[data-wb-form-status]");
+    var formDone = page.querySelector("[data-wb-form-done]");
+    var submitButton = form.querySelector("[type='submit']");
+    var emailRegistration = page.querySelector("[data-wb-register-email]");
+
     form.addEventListener("submit", function (event) {
       event.preventDefault();
       if (!form.reportValidity()) return;
-      formStatus.textContent = "Preview only: registration isn’t switched on yet, so nothing was sent.";
+      submitButton.disabled = true;
+      formStatus.textContent = "Sending your registration…";
+      window.fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(new FormData(form)).toString()
+      }).then(function (response) {
+        if (!response.ok) throw new Error("Registration failed with status " + response.status);
+        form.hidden = true;
+        formDone.hidden = false;
+        formDone.focus();
+      }).catch(function () {
+        submitButton.disabled = false;
+        formStatus.textContent = "Sorry, your registration couldn’t be sent. Please try again";
+        if (emailRegistration) {
+          var link = document.createElement("a");
+          link.href = emailRegistration.href;
+          link.textContent = "register by email";
+          formStatus.appendChild(document.createTextNode(", or "));
+          formStatus.appendChild(link);
+        }
+        formStatus.appendChild(document.createTextNode("."));
+      });
     });
   }
 })();

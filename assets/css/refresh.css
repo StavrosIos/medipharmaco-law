@@ -2711,6 +2711,59 @@ html[lang] body #main-content p.wb-form__status:not(.eyebrow) {
   font-size: .92rem;
 }
 
+.wb-form[hidden],
+.wb-form-done[hidden],
+.wb-form__trap[hidden] {
+  display: none;
+}
+
+html[lang] .wb-register .wb-form__status a {
+  color: var(--c-accent);
+}
+
+.wb-form-done {
+  margin-top: 1.75rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid rgba(0, 195, 237, .5);
+  border-radius: 14px;
+  background: rgba(0, 195, 237, .1);
+}
+
+.wb-form-done:focus {
+  outline: none;
+}
+
+.wb-form-done strong {
+  color: #fff;
+  font: 500 1.1rem/1.4 'Inter', sans-serif;
+}
+
+html[lang] body #main-content .wb-form-done p:not(.eyebrow) {
+  margin: .4rem 0 0;
+  font-size: .98rem;
+}
+
+html[lang] body #main-content p.wb-register__alt:not(.eyebrow) {
+  margin: 1.5rem 0 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, .14);
+  font-size: .95rem;
+}
+
+html[lang] .wb-register .wb-register__alt a {
+  color: var(--c-accent);
+  font-weight: 500;
+}
+
+.wb-avatar svg {
+  width: 1.9rem;
+  height: 1.9rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
 .wb-preview {
   margin-top: 1.5rem;
   padding: .85rem 1rem;
