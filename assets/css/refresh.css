@@ -3923,3 +3923,600 @@ html[lang] body #main-content .mx-tip p.mx-tip__list:empty {
     transition: none;
   }
 }
+
+/* ---------- Who we support: audience pages (for/*) ---------- */
+
+.audience-page svg:is(.aud-switch__arrow svg, .aud-head__link svg, .aud-card__more svg) {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform .25s var(--r-ease);
+}
+
+/* Hero: the question on the left, a switcher between the three audiences on the right */
+.aud-hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(17rem, .75fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: end;
+}
+
+html[lang] body #main-content .aud-hero h1 {
+  max-width: 20ch;
+}
+
+html[lang] body #main-content .aud-hero .lede {
+  margin-bottom: 0;
+}
+
+.aud-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .75rem 1.5rem;
+  margin-top: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+html[lang] .aud-hero__link {
+  color: #fff;
+  font-size: .95rem;
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: rgba(0, 195, 237, .6);
+  text-underline-offset: .35em;
+  transition: color .2s var(--r-ease);
+}
+
+html[lang] .aud-hero__link:hover {
+  color: var(--c-accent);
+}
+
+.aud-switch {
+  display: grid;
+  gap: .35rem;
+  padding: .75rem;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-radius);
+  background: rgba(255, 255, 255, .04);
+}
+
+html[lang] body #main-content p.aud-switch__label:not(.eyebrow) {
+  margin: .25rem 0 .25rem .5rem;
+  color: var(--c-accent);
+  font: 600 .72rem/1.3 var(--c-mono);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+html[lang] .aud-switch__item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: .85rem;
+  padding: .8rem .9rem;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  color: var(--c-copy);
+  text-decoration: none;
+  transition: background-color .25s var(--r-ease), border-color .25s var(--r-ease), color .25s var(--r-ease);
+}
+
+html[lang] .aud-switch__item:hover {
+  background: rgba(255, 255, 255, .06);
+  color: #fff;
+}
+
+html[lang] .aud-switch__item:hover svg {
+  transform: translateX(3px);
+}
+
+html[lang] .aud-switch__item[aria-current='page'] {
+  border-color: rgba(0, 195, 237, .55);
+  background: rgba(0, 195, 237, .1);
+  color: #fff;
+}
+
+.aud-switch__item[aria-current='page'] .aud-switch__arrow {
+  visibility: hidden;
+}
+
+.aud-switch__index {
+  color: var(--c-accent);
+  font: 600 .72rem/1 var(--c-mono);
+  letter-spacing: .08em;
+}
+
+.aud-switch__name {
+  font: 500 1rem/1.3 'Inter Display', 'Inter', sans-serif;
+}
+
+.aud-switch__arrow {
+  display: flex;
+  color: var(--c-accent);
+}
+
+/* Section heading with a text link on the right */
+.aud-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  margin-bottom: clamp(1.5rem, 2.6vw, 2.25rem);
+}
+
+html[lang] body #main-content .aud-head h2 {
+  max-width: 20ch;
+  margin: 1rem 0 0;
+}
+
+html[lang] .aud-head__link {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  color: var(--c-ink-teal);
+  font-size: .95rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+html[lang] .aud-head__link:hover svg {
+  transform: translateX(3px);
+}
+
+/* Solutions: white cards; with five, the last two share the second row */
+.aud-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(.85rem, 1.5vw, 1.25rem);
+}
+
+.aud-grid > .aud-card {
+  grid-column: span 2;
+}
+
+.aud-grid--5 > .aud-card:nth-child(n + 4) {
+  grid-column: span 3;
+}
+
+.aud-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.35rem, 2vw, 1.75rem);
+  border: 1px solid rgba(21, 40, 46, .08);
+  border-radius: var(--r-radius);
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 49, 61, .05);
+  transition: transform .3s var(--r-ease), box-shadow .3s var(--r-ease), border-color .3s var(--r-ease);
+}
+
+.aud-card:hover {
+  border-color: rgba(0, 129, 157, .35);
+  box-shadow: 0 1.25rem 2.5rem -1.25rem rgba(0, 49, 61, .35);
+  transform: translateY(-3px);
+}
+
+.aud-card:focus-within {
+  outline: 2px solid var(--c-accent-on-light);
+  outline-offset: 3px;
+}
+
+.aud-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.aud-card__icon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 14px;
+  background: rgba(0, 129, 157, .1);
+  color: var(--c-ink-teal);
+}
+
+.aud-card__icon svg {
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.aud-card__index {
+  color: var(--c-accent-on-light);
+  font: 600 .75rem/1 var(--c-mono);
+  letter-spacing: .08em;
+}
+
+html[lang] body #main-content .aud-card h3 {
+  margin: 1.1rem 0 .4rem;
+  color: var(--c-ink);
+  font-size: clamp(1.2rem, 1.4vw, 1.4rem);
+}
+
+html[lang] .aud-card__title {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* The title link covers the whole card */
+.aud-card__title::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.aud-card__title:focus-visible {
+  outline: none;
+}
+
+html[lang] body #main-content p.aud-card__text:not(.eyebrow) {
+  margin: 0 0 1rem;
+  color: #3d5258;
+  font-size: .98rem;
+  line-height: 1.55;
+}
+
+.aud-card__caps {
+  display: grid;
+  gap: .45rem;
+  margin: 0 0 1.25rem;
+  padding: 1rem 0 0;
+  border-top: 1px solid var(--c-line-light);
+  list-style: none;
+}
+
+html[lang] body #main-content .aud-card__caps li {
+  position: relative;
+  padding-left: 1.4rem;
+  color: var(--c-ink);
+  font-size: .9rem;
+  line-height: 1.45;
+}
+
+.aud-card__caps li::before {
+  content: '';
+  position: absolute;
+  top: .42em;
+  left: .1rem;
+  width: .55rem;
+  height: .3rem;
+  border-bottom: 2px solid var(--c-accent-on-light);
+  border-left: 2px solid var(--c-accent-on-light);
+  transform: rotate(-45deg);
+}
+
+.aud-card__more {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  margin-top: auto;
+  color: var(--c-ink-teal);
+  font-size: .92rem;
+  font-weight: 600;
+}
+
+.aud-card:hover .aud-card__more svg {
+  transform: translateX(3px);
+}
+
+/* Healthcare: medico-legal feature under the cards */
+.aud-feature {
+  display: grid;
+  grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr);
+  margin-top: clamp(.85rem, 1.5vw, 1.25rem);
+  overflow: hidden;
+  border-radius: var(--r-radius);
+  background: var(--c-deep);
+  color: #fff;
+}
+
+.aud-feature__media {
+  position: relative;
+  min-height: 15rem;
+}
+
+.aud-feature__media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.aud-feature__body {
+  align-self: center;
+  padding: clamp(1.5rem, 3vw, 2.75rem);
+}
+
+html[lang] .aud-feature .eyebrow--light {
+  color: var(--c-accent);
+}
+
+html[lang] body #main-content .aud-feature h3 {
+  margin: .85rem 0 .6rem;
+  color: #fff;
+  font-size: clamp(1.6rem, 2.4vw, 2.25rem);
+  line-height: 1.15;
+}
+
+html[lang] body #main-content .aud-feature p:not(.eyebrow) {
+  max-width: 36rem;
+  margin: 0 0 1.5rem;
+  color: var(--c-copy);
+  font-size: 1rem;
+}
+
+/* How we support: every point on show (bright teal band) */
+html[lang] .aud-support {
+  background: var(--c-bright);
+  color: #fff;
+}
+
+.aud-support__grid {
+  display: grid;
+  grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+}
+
+html[lang] .aud-support .eyebrow--light {
+  color: #a9ecfa;
+}
+
+html[lang] body #main-content .aud-support h2 {
+  margin: 1rem 0;
+  color: #fff;
+}
+
+html[lang] body #main-content .aud-support__intro p:not(.eyebrow) {
+  margin: 0 0 1.75rem;
+  color: rgba(255, 255, 255, .9);
+  font-size: 1rem;
+}
+
+html[lang] body .aud-support .button.aud-button-light {
+  border-color: #fff;
+  background: #fff;
+  color: var(--c-deep);
+}
+
+html[lang] body .aud-support .button.aud-button-light:hover {
+  border-color: #e3f7fb;
+  background: #e3f7fb;
+  color: var(--c-deep);
+}
+
+.aud-points {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.25rem) clamp(1.5rem, 3vw, 2.5rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+html[lang] body #main-content .aud-point {
+  padding-top: 1.1rem;
+  border-top: 1px solid rgba(255, 255, 255, .28);
+  color: #fff;
+}
+
+.aud-point__index {
+  display: block;
+  color: #a9ecfa;
+  font: 600 .75rem/1 var(--c-mono);
+  letter-spacing: .08em;
+}
+
+html[lang] body #main-content .aud-point h3 {
+  margin: .7rem 0 .45rem;
+  color: #fff;
+  font-size: clamp(1.15rem, 1.35vw, 1.3rem);
+}
+
+html[lang] body #main-content .aud-point p:not(.eyebrow) {
+  margin: 0;
+  color: rgba(255, 255, 255, .88);
+  font-size: .95rem;
+  line-height: 1.6;
+}
+
+/* FAQ: question cards, first one open */
+.aud-faq__grid {
+  display: grid;
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+}
+
+html[lang] body #main-content .aud-faq h2 {
+  max-width: 14ch;
+  margin: 1rem 0;
+}
+
+html[lang] body #main-content .aud-faq__intro p:not(.eyebrow) {
+  margin: 0 0 1.25rem;
+  color: #3d5258;
+  font-size: 1rem;
+}
+
+.aud-faq__list {
+  display: grid;
+  gap: .6rem;
+}
+
+html[lang] .aud-faq__list details {
+  border: 1px solid rgba(21, 40, 46, .08);
+  border-radius: 16px;
+  background: #fff;
+  transition: border-color .25s var(--r-ease), box-shadow .25s var(--r-ease);
+}
+
+html[lang] .aud-faq__list details[open] {
+  border-color: rgba(0, 129, 157, .35);
+  box-shadow: 0 1rem 2rem -1.5rem rgba(0, 49, 61, .35);
+}
+
+html[lang] .aud-faq__list summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.05rem 1.25rem;
+  color: var(--c-ink);
+  font: 500 1.05rem/1.4 'Inter Display', 'Inter', sans-serif;
+  list-style: none;
+  cursor: pointer;
+}
+
+html[lang] .aud-faq__list summary::-webkit-details-marker {
+  display: none;
+}
+
+html[lang] .aud-faq__list summary:focus-visible {
+  border-radius: 16px;
+  outline: 2px solid var(--c-accent-on-light);
+  outline-offset: 2px;
+}
+
+.aud-faq__icon {
+  position: relative;
+  flex: 0 0 auto;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  background: rgba(0, 129, 157, .1);
+  transition: background-color .25s var(--r-ease);
+}
+
+.aud-faq__icon::before,
+.aud-faq__icon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: .7rem;
+  height: 2px;
+  margin: -1px 0 0 -.35rem;
+  border-radius: 2px;
+  background: var(--c-ink-teal);
+  transition: transform .25s var(--r-ease), background-color .25s var(--r-ease);
+}
+
+.aud-faq__icon::after {
+  transform: rotate(90deg);
+}
+
+details[open] .aud-faq__icon {
+  background: var(--c-ink-teal);
+}
+
+details[open] .aud-faq__icon::before,
+details[open] .aud-faq__icon::after {
+  background: #fff;
+}
+
+details[open] .aud-faq__icon::after {
+  transform: rotate(0deg);
+}
+
+html[lang] .aud-faq__list details > div {
+  padding: 0 1.25rem 1.2rem;
+}
+
+html[lang] body #main-content .aud-faq__list details p:not(.eyebrow) {
+  max-width: 44rem;
+  margin: 0;
+  color: #3d5258;
+  font-size: .98rem;
+  line-height: 1.65;
+}
+
+@media (max-width: 66rem) {
+  .aud-hero__grid {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 1.5rem;
+  }
+
+  .aud-switch {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  html[lang] body #main-content p.aud-switch__label:not(.eyebrow) {
+    grid-column: 1 / -1;
+  }
+
+  .aud-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .aud-grid > .aud-card,
+  .aud-grid--5 > .aud-card:nth-child(n + 4) {
+    grid-column: auto;
+  }
+
+  .aud-grid--5 > .aud-card:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .aud-support__grid,
+  .aud-faq__grid {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+}
+
+@media (max-width: 48rem) {
+  .aud-switch {
+    grid-template-columns: 1fr;
+    gap: .2rem;
+    padding: .5rem;
+  }
+
+  html[lang] .aud-switch__item {
+    padding: .7rem .8rem;
+  }
+
+  .aud-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .aud-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .aud-grid--5 > .aud-card:last-child {
+    grid-column: auto;
+  }
+
+  .aud-points {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .aud-feature {
+    grid-template-columns: 1fr;
+  }
+
+  .aud-feature__media {
+    min-height: 12rem;
+  }
+
+  html[lang] .aud-faq__list summary {
+    padding: 1rem;
+    font-size: 1rem;
+  }
+
+  html[lang] .aud-faq__list details > div {
+    padding: 0 1rem 1.1rem;
+  }
+}
