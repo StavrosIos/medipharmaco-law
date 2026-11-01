@@ -234,6 +234,15 @@
 
     details.forEach(function (detail, i) {
       detail.style.setProperty("--sx-share", String((i + 1) / details.length));
+      // A blurred copy of the photo fills the frame around the full image.
+      var photo = detail.querySelector(".sx-detail__media img");
+      if (photo) {
+        var backdrop = photo.cloneNode(false);
+        backdrop.className = "sx-detail__backdrop";
+        backdrop.alt = "";
+        backdrop.setAttribute("aria-hidden", "true");
+        photo.parentNode.insertBefore(backdrop, photo);
+      }
     });
 
     applyLayout();

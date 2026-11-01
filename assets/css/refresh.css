@@ -201,11 +201,10 @@ html[lang] .site-nav__links a {
 }
 
 html[lang] .site-nav__links a:hover,
+html[lang] .site-nav__links a:active,
+html[lang] .site-nav__links a:focus-visible,
 html[lang] .site-nav__links a[aria-current='page'] {
-  color: #fff;
-}
-
-html[lang] .site-nav__links a[aria-current='page'] {
+  color: var(--c-accent);
   text-decoration: underline;
   text-decoration-color: var(--c-accent);
   text-decoration-thickness: 2px;
@@ -863,34 +862,41 @@ html[lang] body #main-content .sx-step__overview {
 
 .sx-detail__media {
   position: relative;
-  height: clamp(10rem, 26vh, 16rem);
+  height: clamp(15rem, 62vw, 24rem);
   margin: 0;
   overflow: hidden;
+  background: #00242d;
 }
 
+/* The whole photo is always visible; a blurred copy fills the frame around it */
 .sx-detail__media img {
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
-.sx-detail__media::after {
-  content: '';
+.sx-detail__media .sx-detail__backdrop {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(0deg, var(--c-deep) 0%, rgba(0, 49, 61, 0) 55%);
+  z-index: 0;
+  top: -12%;
+  left: -12%;
+  width: 124%;
+  height: 124%;
+  object-fit: cover;
+  filter: blur(28px) saturate(1.15) brightness(.55);
 }
 
 .sx-detail__body {
   position: relative;
-  padding: 0 clamp(1.5rem, 2.5vw, 2.25rem) clamp(1.5rem, 2.5vw, 2rem);
+  padding: 1.25rem clamp(1.5rem, 2.5vw, 2.25rem) clamp(1.5rem, 2.5vw, 2rem);
 }
 
 .sx-detail__meta {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-top: -.25rem;
   color: var(--c-copy);
   font-size: .8rem;
   font-weight: 600;
@@ -960,8 +966,8 @@ html[lang] body #main-content .sx-services li {
 @media (min-width: 66.001rem) {
   .sx-layout {
     display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    gap: clamp(2.5rem, 5vw, 5.5rem);
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: clamp(2rem, 4vw, 4.5rem);
     align-items: start;
   }
 
@@ -986,9 +992,9 @@ html[lang] body #main-content .sx-services li {
     position: absolute;
     inset: 0;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     margin: 0;
-    overflow: auto;
+    overflow: hidden;
     opacity: 0;
     visibility: hidden;
     transform: translateY(18px) scale(.985);
@@ -1002,23 +1008,40 @@ html[lang] body #main-content .sx-services li {
     transition: opacity .55s var(--r-ease-out), transform .7s var(--r-ease-out), visibility 0s;
   }
 
-  /* The image takes whatever height the services list leaves free */
+  /* Photo column on the left at full card height, details on the right */
   .sx.is-split .sx-detail__media {
-    flex: 1 1 0;
+    flex: 0 0 48%;
     height: auto;
-    min-height: clamp(9rem, 22vh, 14rem);
   }
 
   .sx.is-split .sx-detail__body {
-    flex: 0 0 auto;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    overflow: auto;
+    padding: clamp(1.5rem, 2.4vw, 2.25rem);
   }
 
-  .sx.is-split .sx-detail__media img {
-    transform: scale(1.08);
+  .sx.is-split .sx-services {
+    grid-template-columns: 1fr;
+  }
+
+  html[lang] body #main-content .sx.is-split .sx-services li {
+    padding-block: .42rem;
+  }
+
+  .sx.is-split .sx-services li::before {
+    top: .85rem;
+  }
+
+  .sx.is-split .sx-detail__media img:not(.sx-detail__backdrop) {
+    transform: scale(1.05);
     transition: transform 1.6s var(--r-ease-out);
   }
 
-  .sx.is-split .sx-detail.is-active .sx-detail__media img {
+  .sx.is-split .sx-detail.is-active .sx-detail__media img:not(.sx-detail__backdrop) {
     transform: scale(1);
   }
 
@@ -1357,6 +1380,56 @@ html[lang] .check input[type='checkbox'] {
   display: none;
 }
 
+.sx-more[hidden] {
+  display: none;
+}
+
+/* Phones and tablets: the photo keeps its own shape, up to a sensible height */
+.sx:not(.is-split) .sx-detail__media {
+  height: auto;
+}
+
+.sx:not(.is-split) .sx-detail__media img:not(.sx-detail__backdrop) {
+  display: block;
+  height: auto;
+  max-height: 26rem;
+}
+
+/* Shorter laptop screens: tighten the details so long lists fit the panel */
+@media (min-width: 66.001rem) and (max-height: 900px) {
+  .sx.is-split .sx-detail__body {
+    padding-block: 1.5rem;
+  }
+
+  html[lang] body #main-content .sx.is-split .sx-detail__title {
+    margin: .75rem 0 .9rem;
+    font-size: clamp(1.45rem, 1.9vw, 1.85rem);
+  }
+
+  .sx.is-split .sx-detail .eyebrow {
+    margin-bottom: .5rem;
+  }
+
+  html[lang] body #main-content .sx.is-split .sx-services li {
+    padding-block: .3rem;
+    font-size: .85rem;
+    line-height: 1.35;
+  }
+
+  .sx.is-split .sx-services li::before {
+    top: .7rem;
+  }
+
+  .sx.is-split .sx-services {
+    margin-bottom: 1.1rem;
+  }
+
+  .sx.is-split .sx-detail .button {
+    min-height: 2.75rem;
+    padding-block: .6rem;
+  }
+}
+
 .sx-more {
   display: block;
   margin: -.75rem 0 1.5rem;
@@ -1367,6 +1440,20 @@ html[lang] .check input[type='checkbox'] {
   color: var(--c-accent);
   font: 500 .9rem/1.4 'Inter', sans-serif;
   cursor: pointer;
+}
+
+@media (min-width: 66.001rem) and (max-height: 760px) {
+  .sx.is-split .sx-detail .eyebrow {
+    display: none;
+  }
+
+  html[lang] body #main-content .sx.is-split .sx-services li {
+    padding-block: .2rem;
+  }
+
+  .sx.is-split .sx-services li::before {
+    top: .6rem;
+  }
 }
 
 /* ---------- About: interactive collaboration map (map.js) ---------- */
