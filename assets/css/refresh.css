@@ -1210,9 +1210,56 @@ html[lang] .consent-manage {
   text-transform: none;
 }
 
+/* ---------- Small-screen legibility & tap targets ---------- */
+
+html[lang] [data-sector-carousel].is-carousel-enhanced [data-carousel-toggle] {
+  font-size: .85rem;
+}
+
+html[lang] .outcome-row__action {
+  font-size: .8rem;
+}
+
+html[lang] .v4-audience-card__label,
+html[lang] .v4-audience-cta--solutions .v4-audience-card__label {
+  font-size: .78rem;
+}
+
+html[lang] .check input[type='checkbox'] {
+  flex: 0 0 auto;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: .2rem;
+  accent-color: var(--c-button);
+}
+
 /* ---------- Responsive ---------- */
 
 @media (max-width: 66rem) {
+  /* A backdrop-filter makes the header the containing block for fixed
+     descendants, which would trap the full-screen menu inside the header. */
+  html[lang] .site-header,
+  html[lang] .site-header--solid,
+  html[lang] .site-header.is-compact,
+  html[lang] .site-header--solid.is-compact {
+    background: var(--c-deep);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  /* Open the menu flush under the (slimmer) header */
+  html[lang] .site-nav,
+  html[lang] body.nav-open .site-header.is-compact .site-nav,
+  html[lang] body.nav-open .site-header--solid.is-compact .site-nav {
+    inset: calc(var(--r-header-h) + 1px) 0 0;
+  }
+
+  html[lang] .site-nav .header-contact {
+    width: 100%;
+    min-height: 3.25rem;
+    font-size: 1rem;
+  }
+
   html[lang] .site-nav__links a {
     color: #fff;
     font-family: 'Inter Display', sans-serif;
@@ -1254,6 +1301,18 @@ html[lang] .consent-manage {
     width: auto;
     padding: 1.25rem;
   }
+}
+
+@media (max-width: 66rem) and (prefers-reduced-motion: no-preference) {
+  .nav-open .site-nav__links a,
+  .nav-open .site-nav .header-contact {
+    animation: m-rise .6s var(--r-ease-out) both;
+  }
+
+  .nav-open .site-nav__links a:nth-child(2) { animation-delay: .05s; }
+  .nav-open .site-nav__links a:nth-child(3) { animation-delay: .1s; }
+  .nav-open .site-nav__links a:nth-child(4) { animation-delay: .15s; }
+  .nav-open .site-nav .header-contact { animation-delay: .22s; }
 }
 
 @media (prefers-reduced-motion: reduce) {
