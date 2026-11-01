@@ -200,15 +200,26 @@ html[lang] .site-nav__links a {
   transition: color .2s var(--r-ease);
 }
 
-html[lang] .site-nav__links a:hover,
-html[lang] .site-nav__links a:active,
-html[lang] .site-nav__links a:focus-visible,
+/* Only the page you are on is blue and underlined */
 html[lang] .site-nav__links a[aria-current='page'] {
   color: var(--c-accent);
   text-decoration: underline;
   text-decoration-color: var(--c-accent);
   text-decoration-thickness: 2px;
   text-underline-offset: .55em;
+}
+
+/* Hover colour only where a real pointer can hover (taps leave hover stuck) */
+@media (hover: hover) and (pointer: fine) {
+  html[lang] .site-nav__links a:hover {
+    color: var(--c-accent);
+  }
+}
+
+/* Keyboard focus: no box, the link turns blue instead */
+html[lang] .site-nav__links a:focus-visible {
+  outline: none;
+  color: var(--c-accent);
 }
 
 html[lang] .site-nav .header-contact {

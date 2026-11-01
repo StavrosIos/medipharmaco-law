@@ -1047,8 +1047,10 @@
     if (desktopNavigation.addEventListener) desktopNavigation.addEventListener('change', syncMenuForViewport);
     else if (desktopNavigation.addListener) desktopNavigation.addListener(syncMenuForViewport);
     syncMenuForViewport();
-    toggle.addEventListener("click", function () {
-      setMenuOpen(!body.classList.contains('nav-open'), true);
+    toggle.addEventListener("click", function (event) {
+      // Move focus into the menu only for keyboard activation (detail is 0);
+      // a tap or click should not pre-select the first link.
+      setMenuOpen(!body.classList.contains('nav-open'), event.detail === 0);
     });
 
     nav.addEventListener("click", function (event) {
