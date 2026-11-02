@@ -383,119 +383,171 @@ html[lang] .v4-pathway .v4-text-link {
   margin-top: auto;
 }
 
-/* ---------- Home: why specialist counsel (generalist vs specialist) ---------- */
+/* ---------- Home: the problem and our answer ---------- */
 
 html[lang] .v4-why {
-  background: var(--c-mid);
+  background: var(--c-deep);
 }
 
-.v4-why__head {
+.v4-why__row {
   display: grid;
+  gap: clamp(1.75rem, 4vw, 4rem);
+  align-items: center;
+}
+
+.v4-why__row--problem {
+  grid-template-columns: minmax(0, .95fr) minmax(0, 1.5fr);
+}
+
+.v4-why__row--answer {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 1rem clamp(2rem, 5vw, 5rem);
-  align-items: end;
-  margin-bottom: clamp(1.5rem, 2.6vw, 2.25rem);
+  margin-top: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+html[lang] .v4-why .v4-why__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin: 0 0 1.1rem;
+}
+
+html[lang] .v4-why .v4-why__eyebrow::before {
+  content: '';
+  width: 2.5rem;
+  height: 1px;
+  background: currentColor;
 }
 
 html[lang] body #main-content .v4-why h2 {
-  max-width: 16ch;
-  margin: 1rem 0 0;
-}
-
-html[lang] body #main-content p.v4-why__lead:not(.eyebrow) {
+  max-width: 20ch;
   margin: 0;
-  color: var(--c-copy);
-}
-
-.v4-why__compare {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
-  gap: clamp(.85rem, 1.5vw, 1.25rem);
-}
-
-.v4-why__card {
-  padding: clamp(1.5rem, 2.5vw, 2.25rem);
-  border-radius: var(--r-radius);
-}
-
-.v4-why__card--generalist {
-  border: 1px solid var(--c-line);
-  background: rgba(0, 49, 61, .45);
-}
-
-.v4-why__card--specialist {
-  background: var(--c-bright);
-}
-
-html[lang] body #main-content p.v4-why__label:not(.eyebrow) {
-  margin: 0 0 1rem;
-  color: #fff;
-  font: 500 clamp(1.3rem, 1.7vw, 1.6rem)/1.2 'Inter Display', 'Inter', sans-serif;
-  letter-spacing: -.01em;
-}
-
-.v4-why__card--generalist p.v4-why__label {
-  opacity: .8;
+  font-size: clamp(1.9rem, 2.9vw, 2.6rem);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -.02em;
 }
 
 .v4-why__list {
-  margin: 0;
+  margin: clamp(1.25rem, 2.2vw, 1.75rem) 0 0;
   padding: 0;
   list-style: none;
 }
 
 html[lang] body #main-content .v4-why__list li {
   position: relative;
-  padding: .8rem 0 .8rem 2.35rem;
-  border-top: 1px solid rgba(255, 255, 255, .16);
-  color: #fff;
-  font-size: 1rem;
+  padding: .4rem 0 .4rem 2.1rem;
+  color: var(--c-copy);
+  font-size: 1.02rem;
   line-height: 1.5;
 }
 
 .v4-why__list li::before {
   position: absolute;
-  top: .85rem;
-  left: 0;
-  display: grid;
-  place-items: center;
-  width: 1.45rem;
-  height: 1.45rem;
-  border-radius: 50%;
-  font-size: .75rem;
+  top: .35rem;
+  left: .1rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  line-height: 1;
 }
 
 .v4-why__list--no li::before {
   content: '✕';
-  background: rgba(255, 255, 255, .1);
-  color: #ffb1a8;
+  color: #ff5b66;
 }
 
 .v4-why__list--yes li::before {
   content: '✓';
-  background: #fff;
-  color: var(--c-bright);
+  color: var(--c-accent);
 }
 
-html[lang] body #main-content .v4-why__card--generalist .v4-why__list li {
-  color: var(--c-copy);
+/* Image beside a bright panel */
+.v4-why__card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  overflow: hidden;
+  border-radius: var(--r-radius);
 }
 
-html[lang] body #main-content p.v4-why__note:not(.eyebrow) {
-  margin: 1rem 0 0;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, .16);
-  color: rgba(212, 226, 230, .8);
-  font-size: .92rem;
+.v4-why__media {
+  position: relative;
+  min-height: 100%;
+  margin: 0;
+  background: var(--c-mid);
+}
+
+.v4-why__media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Keeps the red-lit vial in frame at every crop */
+  object-position: 50% 58%;
+}
+
+.v4-why__panel {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.5rem, 2.6vw, 2.25rem);
+  background: var(--c-accent);
+  color: var(--c-deep);
+}
+
+.v4-why__panel--solo {
+  border-radius: var(--r-radius);
+}
+
+html[lang] body #main-content p.v4-why__big:not(.eyebrow) {
+  margin: 0;
+  color: var(--c-deep);
+  font: 700 clamp(2.1rem, 3.6vw, 3.4rem)/1.02 'Inter Display', 'Inter', sans-serif;
+  letter-spacing: -.03em;
+}
+
+html[lang] body #main-content p.v4-why__caption:not(.eyebrow) {
+  margin: .7rem 0 1.25rem;
+  color: var(--c-deep);
+  font-size: .78rem;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+html[lang] body #main-content .v4-why__panel p:not(.eyebrow):not(.v4-why__big):not(.v4-why__caption):not(.v4-why__close) {
+  margin: 0 0 .9rem;
+  color: #04323d;
+  font-size: .98rem;
   line-height: 1.6;
 }
 
-@media (max-width: 48rem) {
-  .v4-why__head,
-  .v4-why__compare {
+html[lang] body #main-content p.v4-why__close:not(.eyebrow) {
+  margin: auto 0 0;
+  padding-top: .6rem;
+  color: var(--c-deep);
+  font: 600 clamp(1.15rem, 1.5vw, 1.4rem)/1.3 'Inter Display', 'Inter', sans-serif;
+  letter-spacing: -.01em;
+}
+
+@media (max-width: 66rem) {
+  .v4-why__row--problem,
+  .v4-why__row--answer {
     grid-template-columns: 1fr;
+  }
+
+  /* The answer reads headline first, panel second */
+  .v4-why__row--answer .v4-why__intro {
+    order: -1;
+  }
+}
+
+@media (max-width: 48rem) {
+  .v4-why__card {
+    grid-template-columns: 1fr;
+  }
+
+  .v4-why__media {
+    min-height: 0;
+    aspect-ratio: 4 / 3;
   }
 }
 
@@ -506,21 +558,27 @@ html[lang] .v4-testimonial.section {
 }
 
 html[lang] .v4-testimonial {
-  text-align: left;
+  text-align: center;
+}
+
+html[lang] .v4-testimonial .eyebrow {
+  display: block;
+  margin-inline: auto;
+  text-align: center;
 }
 
 html[lang] body.home-page--gsap-text .v4-quote-mark,
 html[lang] .v4-quote-mark {
   height: 2.75rem;
-  margin: 1.25rem 0 1rem;
+  margin: 1.25rem auto 1rem;
   font-family: Georgia, 'Times New Roman', serif;
   font-size: 6rem;
   line-height: 1;
 }
 
 html[lang] body #main-content .v4-testimonial blockquote {
-  max-width: 34ch;
-  margin: 0;
+  max-width: 30ch;
+  margin: 0 auto;
   font-family: 'Inter Display', 'Inter', sans-serif;
   font-size: clamp(1.75rem, 3vw, 2.75rem);
   font-weight: 500;
@@ -871,42 +929,47 @@ html[lang] .contact-section .field textarea {
 }
 
 html[lang] .v4-founder-message-more > summary {
-  margin: 0;
+  margin: 0 auto;
   border-radius: 999px;
 }
 
-/* About: the co-founders' message lines up on the left like every other section */
+/* About: the co-founders' message is centred, like the client quote on the homepage */
 html[lang] .v4-founder-letter {
-  max-width: none;
+  max-width: 56rem;
+  margin-inline: auto;
 }
 
 html[lang] .v4-founder-letter__header {
-  margin: 0 0 clamp(1.25rem, 2.5vw, 2rem);
-  text-align: left;
+  margin: 0 auto clamp(1.25rem, 2.5vw, 2rem);
+  text-align: center;
 }
 
 html[lang] .v4-founder-letter__header .eyebrow {
-  margin: 0 0 1rem;
-  text-align: left;
+  margin: 0 auto 1rem;
+  text-align: center;
 }
 
 html[lang] body #main-content .v4-founder-letter__header h2 {
-  margin: 0;
-  text-align: left;
+  margin: 0 auto;
+  text-align: center;
 }
 
 html[lang] .v4-founder-letter .v4-founder-copy {
-  max-width: 52rem;
-  margin: 0;
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+html[lang] body #main-content .v4-founder-letter .v4-founder-copy p {
+  text-align: center;
 }
 
 html[lang] .v4-founder-signoff {
-  margin-inline: 0;
-  text-align: left;
+  margin-inline: auto;
+  text-align: center;
 }
 
 html[lang] .v4-founder-signatures {
-  margin: 0;
+  margin: 0 auto;
 }
 
 /* About: core values in two rows of three from tablet width up */
