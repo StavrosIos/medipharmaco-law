@@ -11,6 +11,12 @@
   var smootherOffset = 0;
   var scrollSmootherMedia;
 
+  // Client decision (Nov 2026): the hero rotation, video, sector carousel and
+  // world map always play on every device and browser, with no pause buttons,
+  // even when the device asks for reduced motion. To honour that setting again,
+  // use window.matchMedia("(prefers-reduced-motion: reduce)") in its place.
+  var autoplayMotion = { matches: false };
+
   if (window.gsap && window.ScrollTrigger && window.ScrollSmoother && smootherHeader && smootherMain && smootherContent && window.gsap.matchMedia) {
     window.gsap.registerPlugin(window.ScrollTrigger, window.ScrollSmoother);
     scrollSmootherMedia = window.gsap.matchMedia();
@@ -276,7 +282,8 @@
   var mobileMap = document.querySelector("[data-mobile-map]");
   if (mobileMap) {
     var mapToggle = document.querySelector("[data-map-toggle]");
-    var mapMotionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    var mapMotionPreference = autoplayMotion;
+    var mapResumeTimer = 0;
     var mapMobileViewport = window.matchMedia("(max-width: 48rem)");
     var mapVisible = false;
     var mapFocused = false;
@@ -319,10 +326,18 @@
         if (!mapFrame) mapFrame = window.requestAnimationFrame(panMap);
       } else stopMapPan();
     }
+    // Swiping the map takes over from the auto-pan, which picks up again from
+    // the new position once the map has been left alone for a few seconds.
     function pauseMapForManualUse() {
       mapUserPaused = true;
       syncMapToggle();
       stopMapPan();
+      window.clearTimeout(mapResumeTimer);
+      mapResumeTimer = window.setTimeout(function () {
+        alignMapPhaseToScroll();
+        mapUserPaused = false;
+        updateMapPan();
+      }, 4000);
     }
     function alignMapPhaseToScroll() {
       var maxScroll = Math.max(0, mobileMap.scrollWidth - mobileMap.clientWidth);
@@ -358,6 +373,7 @@
     mobileMap.addEventListener("pointerdown", pauseMapForManualUse, { passive: true });
     mobileMap.addEventListener("touchstart", pauseMapForManualUse, { passive: true });
     mobileMap.addEventListener("wheel", pauseMapForManualUse, { passive: true });
+    mobileMap.addEventListener("map:manual", pauseMapForManualUse);
     mobileMap.addEventListener("keydown", function (event) {
       if (["ArrowLeft", "ArrowRight", "Home", "End", "PageUp", "PageDown", " "].indexOf(event.key) !== -1) pauseMapForManualUse();
     });
@@ -394,61 +410,84 @@
     var videoToggle = player.querySelector('[data-firm-video-toggle]');
     if (!firmVideo) return;
 
-    var motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var motionPreference = autoplayMotion;
     var isVisible = !('IntersectionObserver' in window);
     var userPaused = false;
-    var retryUsed = false;
+    var userStarted = false;
     var playWasBlocked = false;
     firmVideo.muted = true;
     firmVideo.defaultMuted = true;
 
+    // 'pause' while playing, 'resume' after the visitor paused, 'play' when the
+    // browser blocked autoplay (Safari in Low Power Mode) or motion is reduced.
+    function setToggle(state) {
+      if (!videoToggle) return;
+      var labels = { pause: ['Pause video', 'Pause background video'], resume: ['Resume video', 'Resume background video'], play: ['Play video', 'Play background video'] };
+      videoToggle.hidden = false;
+      videoToggle.dataset.state = state;
+      videoToggle.textContent = labels[state][0];
+      videoToggle.setAttribute('aria-label', labels[state][1]);
+    }
+    function motionAllowed() {
+      return !motionPreference.matches || userStarted;
+    }
     function pauseForReducedMotion() {
       firmVideo.pause();
       player.classList.add('is-reduced-motion');
+      setToggle('play');
     }
     function attemptPlayback() {
-      if (!isVisible || document.hidden || motionPreference.matches || userPaused) return;
+      if (!isVisible || document.hidden || !motionAllowed() || userPaused) return;
       var playback = firmVideo.play();
       if (playback && typeof playback.catch === 'function') {
         playback.then(function () {
           playWasBlocked = false;
-          if (videoToggle) videoToggle.hidden = motionPreference.matches;
+          setToggle('pause');
         }).catch(function () {
           playWasBlocked = true;
-          if (videoToggle) videoToggle.hidden = true;
+          setToggle('play');
         });
       }
     }
     function syncPlayback() {
-      firmVideo.autoplay = !motionPreference.matches && !userPaused;
-      if (videoToggle) videoToggle.hidden = motionPreference.matches;
+      firmVideo.autoplay = motionAllowed() && !userPaused;
       if (document.hidden) { firmVideo.pause(); return; }
-      if (motionPreference.matches) pauseForReducedMotion();
+      if (!motionAllowed()) pauseForReducedMotion();
       else {
         player.classList.remove('is-reduced-motion');
         attemptPlayback();
       }
     }
+    // Browsers that refused autoplay usually allow it after a real tap, click or key press
     function retryAfterInteraction(event) {
-      if (retryUsed || !playWasBlocked || !event.isTrusted || !isVisible || document.hidden || motionPreference.matches || userPaused) return;
-      retryUsed = true;
+      if (!playWasBlocked || !event.isTrusted) return;
       attemptPlayback();
-      document.removeEventListener('pointerdown', retryAfterInteraction);
-      document.removeEventListener('keydown', retryAfterInteraction);
     }
 
     document.addEventListener('visibilitychange', syncPlayback);
     window.addEventListener('pageshow', syncPlayback);
-    document.addEventListener('pointerdown', retryAfterInteraction);
-    document.addEventListener('keydown', retryAfterInteraction);
+    ['click', 'touchend', 'keydown'].forEach(function (type) {
+      document.addEventListener(type, retryAfterInteraction, { passive: true });
+    });
+    firmVideo.addEventListener('loadeddata', function () {
+      if (playWasBlocked || firmVideo.paused) attemptPlayback();
+    });
+    firmVideo.addEventListener('playing', function () {
+      playWasBlocked = false;
+      setToggle('pause');
+    });
     if (videoToggle) {
       videoToggle.addEventListener('click', function () {
-        userPaused = !userPaused;
-        firmVideo.autoplay = !motionPreference.matches && !userPaused;
-        videoToggle.textContent = userPaused ? 'Resume video' : 'Pause video';
-        videoToggle.setAttribute('aria-label', userPaused ? 'Resume background video' : 'Pause background video');
-        if (userPaused) firmVideo.pause();
-        else attemptPlayback();
+        userPaused = !firmVideo.paused;
+        if (userPaused) {
+          firmVideo.pause();
+          setToggle('resume');
+        } else {
+          userStarted = true;
+          player.classList.remove('is-reduced-motion');
+          attemptPlayback();
+        }
+        firmVideo.autoplay = motionAllowed() && !userPaused;
       });
     }
     if (motionPreference.addEventListener) motionPreference.addEventListener('change', syncPlayback);
@@ -465,7 +504,7 @@
     syncPlayback();
   });
   var rotationControl = document.querySelector('[data-rotation-control]');
-  if (rotatingSector && rotationControl) {
+  if (rotatingSector) {
     var rotationTrack = rotatingSector.querySelector('[data-hero-rotation-track]');
     var rotationRows = rotationTrack ? Array.prototype.slice.call(rotationTrack.children) : [];
     var sectorNames = rotationRows.slice(0, -1).map(function (row) { return row.textContent; });
@@ -474,7 +513,7 @@
     var rotationPhaseTimer;
     var rotationFrame;
     var rotationPaused = false;
-    var motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var motionPreference = autoplayMotion;
     var observedWidth = 0;
     var rotationTransitionMs = 250;
     var rotationTravel = 0;
@@ -548,11 +587,11 @@
     }
     function updateRotationPreference() {
       if (motionPreference.matches) rotationIndex = 0;
-      rotationControl.hidden = motionPreference.matches;
+      if (rotationControl) rotationControl.hidden = motionPreference.matches;
       settleRotation();
       scheduleRotation();
     }
-    rotationControl.addEventListener('click', function () {
+    if (rotationControl) rotationControl.addEventListener('click', function () {
       rotationPaused = !rotationPaused;
       rotationControl.textContent = rotationPaused ? 'Resume animation' : 'Pause animation';
       rotationControl.setAttribute('aria-label', rotationPaused ? 'Resume rotating sectors' : 'Pause rotating sectors');
@@ -685,7 +724,7 @@
     var autoplayToggle = carousel.querySelector('[data-carousel-toggle]');
     var status = carousel.querySelector('[data-carousel-status]');
     var cards = Array.prototype.slice.call(track.querySelectorAll('.sector-slide'));
-    var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var reducedMotion = autoplayMotion;
     var gsap = window.gsap;
 
     if (!cards.length) return;
@@ -1106,7 +1145,7 @@
   if (body.classList.contains("home-page--gsap-text") && window.gsap && typeof window.gsap.from === "function" && "IntersectionObserver" in window) {
     var homeGsap = window.gsap;
     var homeMotionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
-    var homeMotionSections = Array.prototype.slice.call(document.querySelectorAll(".v4-hero, .v4-pathways, .v4-narrative, .v4-testimonial, .v4-presenting, .v4-expertise, .v4-traction, .v4-sector-carousel, .v4-cta"));
+    var homeMotionSections = Array.prototype.slice.call(document.querySelectorAll(".v4-hero, .v4-pathways, .v4-narrative, .v4-why, .v4-testimonial, .v4-presenting, .v4-expertise, .v4-traction, .v4-sector-carousel, .v4-cta"));
     var homeMotionTargets = [];
     var homeSectionObserver;
 

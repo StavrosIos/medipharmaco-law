@@ -148,17 +148,6 @@
     }
   }
 
-  /* ---------- Home: sector ticker follows the hero's pause control ---------- */
-
-  var rotationControl = document.querySelector("[data-rotation-control]");
-  if (rotationControl && document.querySelector(".m-marquee")) {
-    rotationControl.addEventListener("click", function () {
-      window.setTimeout(function () {
-        root.classList.toggle("is-motion-paused", /^resume/i.test(rotationControl.textContent.trim()));
-      }, 0);
-    });
-  }
-
   /* ---------- Sectors: scroll timeline with sticky detail panel ---------- */
 
   var timeline = document.querySelector("[data-sx]");

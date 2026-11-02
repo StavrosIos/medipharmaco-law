@@ -6,9 +6,10 @@
   if (!svg) return;
 
   var SVG_NS = "http://www.w3.org/2000/svg";
-  var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  // Always animated, with no pause button (client decision, Nov 2026; see site.js).
+  // Use window.matchMedia("(prefers-reduced-motion: reduce)") to honour the setting again.
+  var reducedMotion = { matches: false };
   var scroller = section.querySelector("[data-mobile-map]");
-  var legacyPanToggle = section.querySelector("[data-map-toggle]");
   var fullView = [0, 0, 1200, 484];
   var maxZoom = 3;
 
@@ -183,15 +184,7 @@
     return button;
   });
 
-  var motionButton = document.createElement("button");
-  motionButton.type = "button";
-  motionButton.className = "mx-motion";
-  motionButton.setAttribute("aria-pressed", "false");
-  motionButton.textContent = "Pause animation";
-  motionButton.hidden = reducedMotion.matches;
-
   toolbar.appendChild(filters);
-  toolbar.appendChild(motionButton);
   var anchor = section.querySelector("[data-map-controls]") || scroller;
   anchor.parentNode.insertBefore(toolbar, anchor);
 
@@ -354,7 +347,7 @@
     animateView(viewForRegion(regionId));
     // On small screens the map scrolls sideways; bring the zoomed region into view.
     if (scroller && scroller.scrollWidth > scroller.clientWidth) {
-      if (legacyPanToggle && legacyPanToggle.getAttribute("aria-pressed") !== "true") legacyPanToggle.click();
+      scroller.dispatchEvent(new CustomEvent("map:manual"));
       scroller.scrollTo({ left: (scroller.scrollWidth - scroller.clientWidth) / 2, behavior: reducedMotion.matches ? "auto" : "smooth" });
     }
   }
@@ -372,14 +365,6 @@
       else svg.unpauseAnimations();
     }
   }
-
-  motionButton.addEventListener("click", function () {
-    userPaused = !userPaused;
-    motionButton.setAttribute("aria-pressed", String(userPaused));
-    motionButton.textContent = userPaused ? "Play animation" : "Pause animation";
-    if (legacyPanToggle && legacyPanToggle.getAttribute("aria-pressed") !== String(userPaused)) legacyPanToggle.click();
-    syncMotion();
-  });
 
   section.classList.add("mx-ready");
   if (reducedMotion.matches || !("IntersectionObserver" in window)) {
