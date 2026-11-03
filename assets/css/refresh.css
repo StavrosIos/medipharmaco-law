@@ -4644,3 +4644,10 @@ html[lang] .site-nav .header-contact {
     transition-duration: 1.8s, .5s !important;
   }
 }
+
+/* 404: the short page still fills the screen down to the footer */
+html[lang] .page-hero--404 {
+  display: flex;
+  align-items: center;
+  min-height: max(20rem, calc(100svh - var(--r-header-h) - 22rem));
+}

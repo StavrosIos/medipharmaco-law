@@ -450,25 +450,48 @@
     });
   }
 
-  /* Registration form: sent to Netlify Forms without leaving the page.
-     Without JavaScript the form still posts normally and Netlify shows its own confirmation. */
+  /* Registration form: sent to Web3Forms, which emails each registration to the firm,
+     without leaving the page. Until the form's access_key is filled in, the details
+     go into an email the visitor sends from their own email app instead. */
   if (form) {
     var formStatus = form.querySelector("[data-wb-form-status]");
     var formDone = page.querySelector("[data-wb-form-done]");
     var submitButton = form.querySelector("[type='submit']");
     var emailRegistration = page.querySelector("[data-wb-register-email]");
 
+    function registrationEmail() {
+      var fields = form.elements;
+      var role = fields.role.value || "";
+      var body = "Please register me for the webinar “" + fields.webinar.value + "”.\n\n" +
+        "Session: " + fields.session.value + "\n" +
+        "Full name: " + fields.name.value + "\n" +
+        "Work email: " + fields.email.value + "\n" +
+        "Organisation: " + fields.organisation.value + "\n" +
+        "Role: " + role + "\n";
+      var address = emailRegistration ? emailRegistration.href.replace(/^mailto:([^?]*).*$/, "$1") : "";
+      return "mailto:" + address + "?subject=" + encodeURIComponent(fields.subject.value) + "&body=" + encodeURIComponent(body);
+    }
+
     form.addEventListener("submit", function (event) {
       event.preventDefault();
       if (!form.reportValidity()) return;
+      if (form.elements.botcheck && form.elements.botcheck.checked) return;
+      if (!form.elements.access_key.value) {
+        window.location.href = registrationEmail();
+        formStatus.textContent = "Your email app should open with your registration filled in. Please press send to reserve your place.";
+        return;
+      }
       submitButton.disabled = true;
       formStatus.textContent = "Sending your registration…";
-      window.fetch("/", {
+      window.fetch(form.action, {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(new FormData(form)).toString()
+        headers: { Accept: "application/json" },
+        body: new FormData(form)
       }).then(function (response) {
-        if (!response.ok) throw new Error("Registration failed with status " + response.status);
+        return response.json().then(function (result) {
+          if (!response.ok || !result.success) throw new Error(result.message || "Registration failed with status " + response.status);
+        });
+      }).then(function () {
         form.hidden = true;
         formDone.hidden = false;
         formDone.focus();
@@ -477,7 +500,7 @@
         formStatus.textContent = "Sorry, your registration couldn’t be sent. Please try again";
         if (emailRegistration) {
           var link = document.createElement("a");
-          link.href = emailRegistration.href;
+          link.href = registrationEmail();
           link.textContent = "register by email";
           formStatus.appendChild(document.createTextNode(", or "));
           formStatus.appendChild(link);
