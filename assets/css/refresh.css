@@ -243,7 +243,9 @@ html[lang] body:not(.home-page--gsap-text) #smooth-wrapper {
   padding-top: 0;
 }
 
-html[lang] body.has-scroll-smoother:not(.home-page--gsap-text) #smooth-wrapper {
+/* While ScrollSmoother runs the header is fixed. Its space goes on the smoothed content,
+   not the wrapper, so it counts towards the scroll length and the footer is fully reachable. */
+html[lang] body.has-scroll-smoother:not(.home-page--gsap-text) #smooth-content {
   padding-top: calc(var(--r-header-h) + 1px);
 }
 
@@ -405,17 +407,7 @@ html[lang] .v4-why {
 }
 
 html[lang] .v4-why .v4-why__eyebrow {
-  display: flex;
-  align-items: center;
-  gap: .75rem;
   margin: 0 0 1.1rem;
-}
-
-html[lang] .v4-why .v4-why__eyebrow::before {
-  content: '';
-  width: 2.5rem;
-  height: 1px;
-  background: currentColor;
 }
 
 html[lang] body #main-content .v4-why h2 {
@@ -561,10 +553,11 @@ html[lang] .v4-testimonial {
   text-align: center;
 }
 
+/* The quote is centred, but its label sits on the left like every other section's */
 html[lang] .v4-testimonial .eyebrow {
   display: block;
-  margin-inline: auto;
-  text-align: center;
+  margin-inline: 0;
+  text-align: left;
 }
 
 html[lang] body.home-page--gsap-text .v4-quote-mark,
@@ -929,47 +922,49 @@ html[lang] .contact-section .field textarea {
 }
 
 html[lang] .v4-founder-message-more > summary {
-  margin: 0 auto;
+  margin: 0;
   border-radius: 999px;
 }
 
-/* About: the co-founders' message is centred, like the client quote on the homepage */
+/* About: the co-founders' message is a centred column of left-aligned text;
+   its label stays on the left like every other section's */
 html[lang] .v4-founder-letter {
-  max-width: 56rem;
-  margin-inline: auto;
+  --founder-column: min(52rem, 100%);
+  max-width: none;
 }
 
 html[lang] .v4-founder-letter__header {
-  margin: 0 auto clamp(1.25rem, 2.5vw, 2rem);
-  text-align: center;
+  margin: 0 0 clamp(1.25rem, 2.5vw, 2rem);
+  text-align: left;
 }
 
 html[lang] .v4-founder-letter__header .eyebrow {
-  margin: 0 auto 1rem;
-  text-align: center;
+  margin: 0 0 1rem;
+  text-align: left;
 }
 
+/* The title starts where the centred text column starts */
 html[lang] body #main-content .v4-founder-letter__header h2 {
-  margin: 0 auto;
-  text-align: center;
+  margin: 0 0 0 calc((100% - var(--founder-column)) / 2);
+  text-align: left;
 }
 
 html[lang] .v4-founder-letter .v4-founder-copy {
-  max-width: 48rem;
+  max-width: var(--founder-column);
   margin: 0 auto;
 }
 
 html[lang] body #main-content .v4-founder-letter .v4-founder-copy p {
-  text-align: center;
+  text-align: left;
 }
 
 html[lang] .v4-founder-signoff {
-  margin-inline: auto;
-  text-align: center;
+  margin-inline: 0;
+  text-align: left;
 }
 
 html[lang] .v4-founder-signatures {
-  margin: 0 auto;
+  margin: 0;
 }
 
 /* About: core values in two rows of three from tablet width up */
